@@ -4,25 +4,32 @@
     hasMilk: boolean;
   };
 
-  class CoffeMaker {
-    static BEANS_GRAM_PER_SHOT: number = 7; // class level
-    coffeeBeans: number = 0;
+  class CoffeeMaker {
+    static BEANS_GRAM_PER_SHOT: number = 7; //class Level
+    coffeeBeans: number = 0; // instance
+
     constructor(coffeeBeans: number) {
       this.coffeeBeans = coffeeBeans;
     }
 
+    static makeMachine(coffeeBeans: number): CoffeeMaker {
+      return new CoffeeMaker(coffeeBeans);
+    }
+
     makeCoffee(shots: number): CoffeeCup {
-      if (this.coffeeBeans < shots * CoffeMaker.BEANS_GRAM_PER_SHOT) {
-        throw new Error("Not enough coffeeBeans");
+      if (this.coffeeBeans < shots * CoffeeMaker.BEANS_GRAM_PER_SHOT) {
+        throw new Error("Not enough");
       }
 
-      this.coffeeBeans -= shots * CoffeMaker.BEANS_GRAM_PER_SHOT;
+      this.coffeeBeans -= shots * CoffeeMaker.BEANS_GRAM_PER_SHOT;
+
       return {
-        shots,
-        hasMilk: false,
+        shots: shots,
+        hasMilk: true,
       };
     }
   }
 
-  const maker = new CoffeMaker(32);
+  const maker = CoffeeMaker.makeMachine(32);
+  console.log(maker);
 }

@@ -9,17 +9,16 @@
 
   function makeCoffee(shots: number): CoffeeCup {
     if (coffeeBeans < shots * BEANS_GRAM_PER_SHOT) {
-      throw new Error("Not enough coffeeBeans");
+      throw new Error("Not enough");
     }
 
     coffeeBeans -= shots * BEANS_GRAM_PER_SHOT;
+
     return {
-      shots,
-      hasMilk: false,
+      shots: shots,
+      hasMilk: true,
     };
   }
-
-  coffeeBeans += 3 * BEANS_GRAM_PER_SHOT;
-  const coffee = makeCoffee(2);
+  const coffee = makeCoffee(7);
   console.log(coffee);
 }
