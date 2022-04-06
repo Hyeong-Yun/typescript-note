@@ -11,17 +11,11 @@
     makeCoffee(shots: number): CoffeeCup;
   }
 
-  interface CommercialCoffeeMaker {
-    makeCoffee(shots: number): CoffeeCup;
-    fillCoffeeBeans(beans: number): void;
-    clean(): void;
-  }
-
   class CoffeeMachine implements CoffeeMaker {
     private static BEANS_GRAM_PER_SHOT: number = 7; //class Level
     coffeeBeans: number = 0; // instance
 
-    private constructor(coffeeBeans: number) {
+    constructor(coffeeBeans: number) {
       this.coffeeBeans = coffeeBeans;
     }
 
@@ -38,7 +32,7 @@
     clean() {
       console.log("cleaning the machine");
     }
-    grindBeans(shots) {
+    grindBeans(shots: number) {
       console.log(`grinding beans for ${shots}`);
       if (this.coffeeBeans < shots * CoffeeMachine.BEANS_GRAM_PER_SHOT) {
         throw new Error("Not enough coffee beans!");
@@ -65,23 +59,28 @@
     }
   }
 
-  const maker: CommercialCoffeeMaker = CoffeeMachine.makeMachine(32);
-  console.log(maker);
+  class CaffeLatteMachine extends CoffeeMachine {
+    constructor(beans: number, serialNumber: string) {
+      super(beans);
+    }
 
-  class AmateurUser {
-    constructor(private machine: CoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
+    private steamMilk(): void {
+      console.log("Steaming some milik...");
+    }
+
+    makeCoffee(shots: number): CoffeeCup {
+      const coffee = super.makeCoffee(shots);
+      this.steamMilk();
+      return {
+        ...coffee,
+        hasMilk: true,
+      };
     }
   }
 
-  class ProBarista {
-    constructor(private machine: CommercialCoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
-      console.log(coffee);
-      this.machine.fillCoffeeBeans(45);
-      this.machine.clean();
-    }
-  }
+  const machine = new CoffeeMachine(23);
+  const latteMachine = new CaffeLatteMachine(23, "SSS");
+
+  const coffee = latteMachine.makeCoffee(2);
+  console.log(coffee);
 }
